@@ -3,6 +3,8 @@ var getBrowserRTC = require('get-browser-rtc')
 var randombytes = require('randombytes')
 var stream = require('readable-stream')
 var queueMicrotask = require('queue-microtask') // TODO: remove when Node 10 is not supported
+var browser = require('browser-detect')
+
 
 var MAX_BUFFERED_AMOUNT = 64 * 1024
 var ICECOMPLETE_TIMEOUT = 5 * 1000
@@ -271,9 +273,11 @@ class Peer extends stream.Duplex {
   addStream (stream) {
     this._debug('addStream()')
 
-    stream.getTracks().forEach(track => {
-      this.addTrack(track, stream)
-    })
+    this._pc.addStream(stream)
+
+    // stream.getTracks().forEach(track => {
+    //   this.addTrack(track, stream)
+    // })
   }
 
   /**
